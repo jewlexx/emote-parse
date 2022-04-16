@@ -1,8 +1,8 @@
 import * as emotes from './emotes';
 import type { EmoteData } from './emotes';
 
-function parseJson(callback: () => string) {
-  return () => JSON.parse(callback());
+function parseJson(callback: (...args: any[]) => string) {
+  return (...args: any[]) => JSON.parse(callback(args));
 }
 
 export const parseString = emotes.parseString;
