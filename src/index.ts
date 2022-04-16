@@ -4,15 +4,26 @@ function parseJson(callback: (...args: any) => string) {
   return () => JSON.parse(callback());
 }
 
-function parseString(str: string, emotes: any[]): number[] {
-  const numbers: number[] = [];
+export type ParseReturn = {
+  id: string;
+  code: string;
+  index: number;
+  userId: string;
+  imageType: 'png' | 'jpg';
+}[];
+
+export function parseString(str: string, emotes: any[]): ParseReturn {
+  const numbers: ParseReturn = [];
 
   emotes.forEach((emote) => {
     function getIndex(startIndex?: number) {
       const index = str.indexOf(emote.code, startIndex);
 
       if (index != -1) {
-        numbers.push(index);
+        numbers.push({
+          ...emote,
+          index,
+        });
         getIndex(index + 1);
       }
     }
@@ -23,16 +34,4 @@ function parseString(str: string, emotes: any[]): number[] {
   return numbers;
 }
 
-type EmotesModule = typeof emotes;
-interface IModule extends EmotesModule {
-  /** Returns an array of all the indexes of the emotes in the string */
-  parseString: (str: string, emotes: any) => number[];
-  [key: string]: any;
-}
-
-const parser: IModule = {
-  getBTTV: parseJson(emotes.getBTTV),
-  parseString,
-};
-
-export = parser;
+export const getBTTV = parseJson(emotes.getBTTV);
