@@ -26,7 +26,7 @@ lazy_static! {
 }
 
 fn get_bttv(mut cx: FunctionContext) -> JsResult<JsString> {
-    let cache_file_path = CACHE_DIR.clone().unwrap().join("bttv.json");
+    let cache_file_path = CACHE_DIR.clone().unwrap().join("bttv.global.json");
     // let meta = cache_file.metadata().unwrap();
     // let last_modified = meta.modified().unwrap();
 
