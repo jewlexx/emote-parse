@@ -63,23 +63,53 @@ pub fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
 }
 
 pub fn get_bttv(mut cx: FunctionContext) -> JsResult<JsString> {
-    let cache_file_path = CACHE_DIR.clone().unwrap().join("bttv.global.json");
-    // let meta = cache_file.metadata().unwrap();
-    // let last_modified = meta.modified().unwrap();
+    if let Some(user_id_val) = cx.argument_opt(1) {
+        let user_id = user_id_val
+            .downcast::<JsString, FunctionContext>(&mut cx)
+            .unwrap()
+            .value(&mut cx);
 
-    let mut cache_file = File::create(cache_file_path).unwrap();
+        let cache_file_path = CACHE_DIR
+            .clone()
+            .unwrap()
+            .join(format!("bttv.{}.json", user_id));
 
-    let client = CLIENT.clone();
+        let mut cache_file = File::create(cache_file_path).unwrap();
+        let client = CLIENT.clone();
 
-    let res = client
-        .get("https://api.betterttv.net/3/cached/emotes/global")
-        .send()
-        .unwrap()
-        .json::<Value>()
-        .unwrap()
-        .to_string();
+        let res = client
+            .get(format!(
+                "https://api.betterttv.net/3/cached/users/twitch/{}",
+                user_id
+            ))
+            .send()
+            .unwrap()
+            .json::<Value>()
+            .unwrap()
+            .to_string();
 
-    cache_file.write_all(res.as_bytes()).unwrap();
+        cache_file.write_all(res.as_bytes()).unwrap();
 
-    Ok(cx.string(res))
+        Ok(cx.string(res))
+    } else {
+        let cache_file_path = CACHE_DIR.clone().unwrap().join("bttv.global.json");
+        // let meta = cache_file.metadata().unwrap();
+        // let last_modified = meta.modified().unwrap();
+
+        let mut cache_file = File::create(cache_file_path).unwrap();
+
+        let client = CLIENT.clone();
+
+        let res = client
+            .get("https://api.betterttv.net/3/cached/emotes/global")
+            .send()
+            .unwrap()
+            .json::<Value>()
+            .unwrap()
+            .to_string();
+
+        cache_file.write_all(res.as_bytes()).unwrap();
+
+        Ok(cx.string(res))
+    }
 }
