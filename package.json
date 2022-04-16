@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "",
   "main": "src/emotes.node",
-  "types": "types/emotes.d.ts",
+  "types": "src/emotes.d.ts",
   "scripts": {
     "build": "cargo-cp-artifact -nc src/emotes.node -- cargo build --message-format=json-render-diagnostics",
     "build-debug": "npm run build --",
