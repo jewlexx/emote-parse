@@ -87,11 +87,13 @@ pub fn get_bttv(mut cx: FunctionContext) -> JsResult<JsString> {
             .json::<Value>()
             .unwrap();
 
-        let emotes = res.get("channelEmotes").unwrap().to_string();
+        let mut emotes = res["channelEmotes"].as_array().unwrap().to_owned();
+        emotes.append(&mut res["sharedEmotes"].as_array().unwrap().to_owned());
 
-        cache_file.write_all(emotes.as_bytes()).unwrap();
+        let as_string = serde_json::to_string(&emotes).unwrap();
+        cache_file.write_all(as_string.as_bytes()).unwrap();
 
-        Ok(cx.string(emotes))
+        Ok(cx.string(as_string))
     } else {
         let cache_file_path = CACHE_DIR.clone().unwrap().join("bttv.global.json");
         // let meta = cache_file.metadata().unwrap();

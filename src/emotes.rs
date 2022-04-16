@@ -7,7 +7,6 @@ pub struct EmoteData {
     pub id: String,
     pub code: String,
     pub image_type: String,
-    pub user_id: String,
 }
 
 impl EmoteData {
@@ -18,16 +17,11 @@ impl EmoteData {
             .get::<JsString, C, &str>(cx, "imageType")
             .unwrap()
             .value(cx);
-        let user_id = obj
-            .get::<JsString, C, &str>(cx, "userId")
-            .unwrap()
-            .value(cx);
 
         EmoteData {
             id,
             code,
             image_type,
-            user_id,
         }
     }
 
@@ -42,9 +36,6 @@ impl EmoteData {
 
         let image_type = cx.string(&self.image_type);
         obj.set(cx, "imageType", image_type)?;
-
-        let user_id = cx.string(&self.user_id);
-        obj.set(cx, "userId", user_id)?;
 
         Ok(obj)
     }
