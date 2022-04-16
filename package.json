@@ -4,22 +4,22 @@
   "description": "",
   "license": "MIT",
   "author": "Juliette Cordor",
-  "main": "src/emotes.node",
-  "types": "src/emotes.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "cargo-cp-artifact -nc src/emotes.node -- cargo build --message-format=json-render-diagnostics",
+    "build": "tsc && cp src/emotes.d.ts dist/emotes.d.ts && cargo-cp-artifact -nc dist/emotes.node -- cargo build --message-format=json-render-diagnostics",
     "build-debug": "npm run build --",
     "build-release": "npm run build -- --release",
     "install": "npm run build-release",
     "test": "cargo test"
+  },
+  "dependencies": {
+    "tslib": "2.3.1"
   },
   "devDependencies": {
     "@types/node": "17.0.24",
     "cargo-cp-artifact": "0.1.6",
     "ts-node": "10.7.0",
     "typescript": "4.6.3"
-  },
-  "dependencies": {
-    "tslib": "2.3.1"
   }
 }
