@@ -150,10 +150,6 @@ fn emote_vec_to_array<'a, C: Context<'a>>(
 
 const SIZES: [u8; 3] = [1, 2, 3];
 
-fn find_index(string: &str, find: &str) -> Option<usize> {
-    string.find(find)
-}
-
 fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
     let string = cx.argument::<JsString>(0)?.value(&mut cx);
     let emotes = cx.argument::<JsArray>(1)?;
@@ -182,12 +178,13 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
 
         let mut start: usize = 0;
         loop {
-            let index = find_index(&string[start..], &casted_emote.code);
+            let sliced_string = &string[start..];
+            let index = sliced_string.find(&casted_emote.code);
 
             match index {
                 Some(i) => {
                     indexes.push(i);
-                    start = i;
+                    start += i + 1;
                 }
                 None => break,
             }
