@@ -25,7 +25,7 @@ lazy_static! {
     };
 }
 
-fn get_info(mut cx: FunctionContext) -> JsResult<JsString> {
+fn get_bttv(mut cx: FunctionContext) -> JsResult<JsString> {
     let cache_file_path = CACHE_DIR.clone().unwrap().join("bttv.json");
     // let meta = cache_file.metadata().unwrap();
     // let last_modified = meta.modified().unwrap();
@@ -49,6 +49,6 @@ fn get_info(mut cx: FunctionContext) -> JsResult<JsString> {
 
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
-    cx.export_function("getInfo", get_info)?;
+    cx.export_function("getBTTV", get_bttv)?;
     Ok(())
 }
