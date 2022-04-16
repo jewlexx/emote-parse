@@ -30,9 +30,7 @@ impl EmoteData {
             user_id,
         }
     }
-}
 
-impl EmoteData {
     pub fn to_object<'a, C: Context<'a>>(&self, cx: &mut C) -> JsResult<'a, JsObject> {
         let obj = cx.empty_object();
 
