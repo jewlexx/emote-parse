@@ -6,6 +6,9 @@
   "author": "Juliette Cordor",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc && cp src/emotes.d.ts dist/emotes.d.ts && cargo-cp-artifact -nc dist/emotes.node -- cargo build --message-format=json-render-diagnostics",
     "build-debug": "npm run build --",
