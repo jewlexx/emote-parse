@@ -1,5 +1,6 @@
 const neon = require('../');
 
 const bttv = neon.getBTTV('121059319');
-const ex = neon.parseString(':tf: :tf: CiGrip GIGA', bttv);
-console.log(ex);
+console.log(bttv);
+// const ex = neon.parseString(':tf: :tf: CiGrip GIGA', bttv);
+// console.log(ex);
