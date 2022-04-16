@@ -4,42 +4,33 @@ function parseJson(callback: () => string) {
   return () => JSON.parse(callback());
 }
 
-type EmoteUrl = `https://cdn.betterttv.net/emote/${string}/${1 | 2 | 3}x`;
+// export function parseString(str: string, emotes: any[]): ParseReturn {
+//   const numbers: ParseReturn = [];
 
-export type ParseReturn = {
-  id: string;
-  code: string;
-  index: number;
-  userId: string;
-  urls: EmoteUrl[];
-  imageType: 'png' | 'gif';
-}[];
+//   emotes.forEach((emote) => {
+//     const urls = [1, 2, 3].map((v) => {
+//       return `https://cdn.betterttv.net/emote/${emote.id}/${v}x`;
+//     });
 
-export function parseString(str: string, emotes: any[]): ParseReturn {
-  const numbers: ParseReturn = [];
+//     function getIndex(startIndex?: number) {
+//       const index = str.indexOf(emote.code, startIndex);
 
-  emotes.forEach((emote) => {
-    const urls = [1, 2, 3].map((v) => {
-      return `https://cdn.betterttv.net/emote/${emote.id}/${v}x`;
-    });
+//       if (index != -1) {
+//         numbers.push({
+//           ...emote,
+//           urls,
+//           index,
+//         });
+//         getIndex(index + 1);
+//       }
+//     }
 
-    function getIndex(startIndex?: number) {
-      const index = str.indexOf(emote.code, startIndex);
+//     getIndex();
+//   });
 
-      if (index != -1) {
-        numbers.push({
-          ...emote,
-          urls,
-          index,
-        });
-        getIndex(index + 1);
-      }
-    }
+//   return numbers;
+// }
 
-    getIndex();
-  });
-
-  return numbers;
-}
+export const parseString = emotes.parseString;
 
 export const getBTTV = parseJson(emotes.getBTTV);
