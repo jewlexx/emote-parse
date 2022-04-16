@@ -1,6 +1,6 @@
 import * as emotes from './emotes';
 
-function parseJson(callback: (...args: any) => string) {
+function parseJson(callback: () => string) {
   return () => JSON.parse(callback());
 }
 
