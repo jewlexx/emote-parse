@@ -172,8 +172,6 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
             )
         });
 
-        println!("Pre finding indexes");
-
         let mut indexes = Vec::<usize>::new();
 
         let mut start: usize = 0;
@@ -189,8 +187,6 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
                 None => break,
             }
         }
-
-        println!("Post finding indexes");
 
         for index in indexes {
             parsed.push(ParsedResult {
