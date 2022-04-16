@@ -1,0 +1,23 @@
+[package]
+name = "ttvparse"
+version = "0.1.0"
+license = "MIT"
+edition = "2018"
+exclude = ["index.node"]
+
+[lib]
+crate-type = ["cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num_cpus = "1.13.1"
+reqwest = { version = "0.11.10", features = ["json", "blocking"] }
+serde_json = "1.0.79"
+directories = "4.0.1"
+lazy_static = "1.4.0"
+
+[dependencies.neon]
+version = "0.10"
+default-features = false
+features = ["napi-6"]

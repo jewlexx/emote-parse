@@ -1,0 +1,19 @@
+{
+  "name": "ttvparse",
+  "version": "0.1.0",
+  "description": "",
+  "license": "MIT",
+  "author": "",
+  "main": "src/emotes.node",
+  "types": "types/emotes.d.ts",
+  "scripts": {
+    "build": "cargo-cp-artifact -nc src/emotes.node -- cargo build --message-format=json-render-diagnostics",
+    "build-debug": "npm run build --",
+    "build-release": "npm run build -- --release",
+    "install": "npm run build-release",
+    "test": "cargo test"
+  },
+  "devDependencies": {
+    "cargo-cp-artifact": "0.1"
+  }
+}
