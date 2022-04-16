@@ -8,6 +8,7 @@ export interface EmoteData {
 export type ParseReturn = {
   emote: EmoteData;
   index: number;
+  endIndex: number;
   urls: EmoteUrl[];
 };
 

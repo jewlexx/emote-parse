@@ -103,6 +103,7 @@ impl EmoteData {
 struct ParsedResult {
     pub emote: EmoteData,
     pub index: i32,
+    pub end_index: i32,
     pub urls: [String; 3],
 }
 
@@ -115,6 +116,9 @@ impl ParsedResult {
 
         let index = cx.number(self.index);
         obj.set(cx, "index", index)?;
+
+        let end_index = cx.number(self.end_index);
+        obj.set(cx, "endIndex", end_index)?;
 
         let urls = array_to_array(&self.urls, cx)?;
         obj.set(cx, "urls", urls)?;
@@ -172,7 +176,7 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
             )
         });
 
-        let mut indexes = Vec::<usize>::new();
+        let mut indexes = Vec::<(usize, usize)>::new();
 
         let mut start: usize = 0;
         loop {
@@ -181,17 +185,18 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
 
             match index {
                 Some(i) => {
-                    indexes.push(i);
+                    indexes.push((i, i + casted_emote.code.len()));
                     start += i + 1;
                 }
                 None => break,
             }
         }
 
-        for index in indexes {
+        for (index, end_index) in indexes {
             parsed.push(ParsedResult {
                 emote: casted_emote.clone(),
                 index: index as i32,
+                end_index: end_index as i32,
                 urls: urls.clone(),
             });
         }
