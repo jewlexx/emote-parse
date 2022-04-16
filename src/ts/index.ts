@@ -1,4 +1,5 @@
 import * as emotes from './emotes';
+import type { EmoteData } from './emotes';
 
 function parseJson(callback: () => string) {
   return () => JSON.parse(callback());
@@ -6,4 +7,4 @@ function parseJson(callback: () => string) {
 
 export const parseString = emotes.parseString;
 
-export const getBTTV = parseJson(emotes.getBTTV);
+export const getBTTV: () => EmoteData[] = parseJson(emotes.getBTTV);
