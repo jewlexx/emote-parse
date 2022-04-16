@@ -12,7 +12,7 @@ export type ParseReturn = {
   index: number;
   userId: string;
   urls: EmoteUrl[];
-  imageType: 'png' | 'jpg';
+  imageType: 'png' | 'gif';
 }[];
 
 export function parseString(str: string, emotes: any[]): ParseReturn {
