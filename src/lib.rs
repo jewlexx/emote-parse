@@ -47,6 +47,7 @@ fn get_bttv(mut cx: FunctionContext) -> JsResult<JsString> {
     Ok(cx.string(res))
 }
 
+#[derive(Debug, Clone)]
 struct EmoteData {
     pub id: String,
     pub code: String,
@@ -149,15 +150,26 @@ fn emote_vec_to_array<'a, C: Context<'a>>(
 
 const SIZES: [u8; 3] = [1, 2, 3];
 
+fn find_index(string: &String, find: &str, indexes: &'_ mut Vec<usize>) -> Vec<usize> {
+    match string.find(find) {
+        Some(i) => {
+            indexes.push(i);
+            return find_index(string, &find[i..], indexes);
+        }
+        None => (),
+    };
+    indexes.to_vec()
+}
+
 fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
-    let string = cx.argument::<JsString>(0)?;
+    let string = cx.argument::<JsString>(0)?.value(&mut cx);
     let emotes = cx.argument::<JsArray>(1)?;
 
     let emotes_vec = emotes.to_vec(&mut cx)?;
 
     let mut parsed: Vec<ParsedResult> = Vec::new();
 
-    for (index, emote) in emotes_vec.iter().enumerate() {
+    for emote in emotes_vec {
         let emote_obj = emote
             .downcast::<JsObject, FunctionContext>(&mut cx)
             .unwrap();
@@ -171,13 +183,16 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
             )
         });
 
-        let result = ParsedResult {
-            emote: casted_emote,
-            index: index as i32,
-            urls,
-        };
+        let indexes = find_index(&string, &casted_emote.code, &mut Vec::new());
 
-        parsed.push(result);
+        for index in indexes {
+            let result = ParsedResult {
+                emote: casted_emote.clone(),
+                index: index as i32,
+                urls: urls.clone(),
+            };
+            parsed.push(result);
+        }
     }
 
     emote_vec_to_array(parsed, &mut cx)
