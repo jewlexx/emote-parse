@@ -1,3 +1,3 @@
 const neon = require('../');
 
-console.log(neon.getInfo());
+console.log(neon.getBTTV());
