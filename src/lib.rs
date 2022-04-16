@@ -186,12 +186,11 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
         let indexes = find_index(&string, &casted_emote.code, &mut Vec::new());
 
         for index in indexes {
-            let result = ParsedResult {
+            parsed.push(ParsedResult {
                 emote: casted_emote.clone(),
                 index: index as i32,
                 urls: urls.clone(),
-            };
-            parsed.push(result);
+            });
         }
     }
 
