@@ -83,16 +83,16 @@ impl EmoteData {
     fn to_object<'a, C: Context<'a>>(&self, cx: &mut C) -> JsResult<'a, JsObject> {
         let obj = cx.empty_object();
 
-        let id = cx.string(self.id);
+        let id = cx.string(&self.id);
         obj.set(cx, "id", id)?;
 
-        let code = cx.string(self.code);
+        let code = cx.string(&self.code);
         obj.set(cx, "code", code)?;
 
-        let image_type = cx.string(self.image_type);
+        let image_type = cx.string(&self.image_type);
         obj.set(cx, "imageType", image_type)?;
 
-        let user_id = cx.string(self.user_id);
+        let user_id = cx.string(&self.user_id);
         obj.set(cx, "userId", user_id)?;
 
         Ok(obj)
@@ -110,7 +110,7 @@ impl ParsedResult {
         let obj = cx.empty_object();
 
         let emote = self.emote.to_object(cx)?;
-        obj.set(cx, "emote", emote);
+        obj.set(cx, "emote", emote)?;
 
         let index = cx.number(self.index);
         obj.set(cx, "index", index)?;
@@ -164,7 +164,7 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
 
         let casted_emote = EmoteData::from_object(&mut cx, emote_obj);
 
-        let urls = SIZES.clone().map(|size| {
+        let urls = SIZES.map(|size| {
             format!(
                 "https://cdn.betterttv.net/emote/{}/{}x",
                 casted_emote.id, size
@@ -186,5 +186,6 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("getBTTV", get_bttv)?;
+    cx.export_function("parseString", parse_string)?;
     Ok(())
 }
