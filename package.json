@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && cp src/emotes.d.ts dist/emotes.d.ts && cargo-cp-artifact -nc dist/emotes.node -- cargo build --message-format=json-render-diagnostics",
+    "build": "tsc && cp src/ts/emotes.d.ts dist/emotes.d.ts && cargo-cp-artifact -nc dist/emotes.node -- cargo build --message-format=json-render-diagnostics",
     "build-debug": "npm run build --",
     "build-release": "npm run build -- --release",
     "install": "npm run build-release",
