@@ -64,6 +64,7 @@ pub fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
 
 pub fn get_bttv(mut cx: FunctionContext) -> JsResult<JsString> {
     if let Some(user_id_val) = cx.argument_opt(0) {
+        println!("{:?}", user_id_val);
         let user_id = user_id_val
             .downcast::<JsString, FunctionContext>(&mut cx)
             .unwrap()
