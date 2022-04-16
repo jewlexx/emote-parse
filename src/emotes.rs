@@ -1,6 +1,6 @@
 use neon::prelude::*;
 
-use crate::array_to_array;
+use crate::helpers::array::array_to_array;
 
 #[derive(Debug, Clone)]
 pub struct EmoteData {
