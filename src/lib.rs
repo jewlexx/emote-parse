@@ -79,17 +79,68 @@ impl EmoteData {
     }
 }
 
+impl EmoteData {
+    fn to_object<'a, C: Context<'a>>(&self, cx: &mut C) -> JsResult<'a, JsObject> {
+        let obj = cx.empty_object();
+
+        let id = cx.string(self.id);
+        obj.set(cx, "id", id)?;
+
+        let code = cx.string(self.code);
+        obj.set(cx, "code", code)?;
+
+        let image_type = cx.string(self.image_type);
+        obj.set(cx, "imageType", image_type)?;
+
+        let user_id = cx.string(self.user_id);
+        obj.set(cx, "userId", user_id)?;
+
+        Ok(obj)
+    }
+}
+
 struct ParsedResult {
     pub emote: EmoteData,
     pub index: i32,
     pub urls: [String; 3],
 }
 
-fn vec_to_array<'a, C: Context<'a>>(vec: Vec<String>, cx: &mut C) -> JsResult<'a, JsArray> {
+impl ParsedResult {
+    fn to_object<'a, C: Context<'a>>(&self, cx: &mut C) -> JsResult<'a, JsObject> {
+        let obj = cx.empty_object();
+
+        let emote = self.emote.to_object(cx)?;
+        obj.set(cx, "emote", emote);
+
+        let index = cx.number(self.index);
+        obj.set(cx, "index", index)?;
+
+        let urls = array_to_array(&self.urls, cx)?;
+        obj.set(cx, "urls", urls)?;
+
+        Ok(obj)
+    }
+}
+
+fn array_to_array<'a, C: Context<'a>>(array: &[String], cx: &mut C) -> JsResult<'a, JsArray> {
+    let a = JsArray::new(cx, array.len() as u32);
+
+    for (i, s) in array.iter().enumerate() {
+        let v = cx.string(s);
+        a.set(cx, i as u32, v)?;
+    }
+
+    Ok(a)
+}
+
+fn emote_vec_to_array<'a, C: Context<'a>>(
+    vec: Vec<ParsedResult>,
+    cx: &mut C,
+) -> JsResult<'a, JsArray> {
     let a = JsArray::new(cx, vec.len() as u32);
 
     for (i, s) in vec.iter().enumerate() {
-        let v = cx.string(s);
+        let v = s.to_object(cx)?;
         a.set(cx, i as u32, v)?;
     }
 
@@ -125,9 +176,11 @@ fn parse_string(mut cx: FunctionContext) -> JsResult<JsArray> {
             index: index as i32,
             urls,
         };
+
+        parsed.push(result);
     }
 
-    vec_to_array(parsed, &mut cx)
+    emote_vec_to_array(parsed, &mut cx)
 }
 
 #[neon::main]
