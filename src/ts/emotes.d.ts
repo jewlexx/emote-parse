@@ -17,5 +17,5 @@ export type EmoteUrl = `https://cdn.betterttv.net/emote/${string}/${
   | 2
   | 3}x`;
 
-export declare function getBTTV(): string;
+export declare function getBTTV(userId?: string): string;
 export declare function parseString(str: string, emotes: any[]): ParseReturn[];
